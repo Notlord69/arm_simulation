@@ -1,0 +1,26 @@
+import mujoco, mujoco.viewer, numpy as np, time
+
+m = mujoco.MjModel.from_xml_path("mujoco_menagerie/franka_emika_panda/scene.xml")
+d = mujoco.MjData(m)
+print(f"nq={m.nq} nv={m.nv} nu={m.nu} timestep={m.opt.timestep}")
+
+mujoco.mj_resetDataKeyframe(m, d, 0)   # start at home pose if a keyframe exists
+log = []
+
+home = m.key_ctrl[0].copy()      # put this line before the loop
+m.actuator_gainprm[0, 0] = 500
+m.actuator_biasprm[0, 1:3] = [-500, -50]
+
+with mujoco.viewer.launch_passive(m, d) as v:
+    t0 = time.time()
+    while v.is_running() and d.time < 20:
+        # inside the loop:
+        for i in range(7):
+            d.ctrl[i] = home[i] + 0.3 * np.sin(d.time + i * 0.7) 
+        d.ctrl[7] = 255 if np.sin(2 * d.time) > 0 else 0 
+        mujoco.mj_step(m, d)
+        log.append(np.concatenate([[d.time], d.qpos, d.qvel]))
+        v.sync()
+        time.sleep(max(0, d.time - (time.time() - t0)))  # real-time pacing
+
+np.save("panda_log.npy", np.array(log))
