@@ -1,1 +1,5 @@
 \mj-linux-env
+sim-env/
+brain/data/
+\mujoco_menagerie
+
