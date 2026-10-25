@@ -93,21 +93,36 @@ class WeightSet:
         keep = np.flatnonzero(tot >= min_syn)
         return pd.Series(tot[keep], index=keep, name='syn_from_group')
 
-    def hops(self, seeds, n_hops, direction='out', min_syn=1, verbose=True):
-        """Neurons reachable within n_hops (each hop: edges with >= min_syn)."""
+    def distances(self, seeds, n_hops, direction='out', min_syn=1, verbose=True):
+        """Hop distance from seeds for every neuron (-1 = not reached within n_hops).
+        Each hop uses only connections with >= min_syn synapses."""
         A = self._adj()
         A = A if direction == 'out' else A.T.tocsr()
         A = A.multiply(A >= min_syn).tocsr()
-        reached = np.zeros(self.N, bool)
-        reached[seeds] = True
+        dist = np.full(self.N, -1, np.int16)
+        dist[seeds] = 0
         frontier = np.asarray(seeds)
         for h in range(1, n_hops + 1):
             nxt = np.unique(A[frontier].indices)
-            frontier = nxt[~reached[nxt]]
-            reached[frontier] = True
+            frontier = nxt[dist[nxt] < 0]
+            dist[frontier] = h
             if verbose:
-                print(f"  hop {h}: +{len(frontier):,} new, {reached.sum():,} total")
-        return np.flatnonzero(reached)
+                print(f"  hop {h}: +{len(frontier):,} new, {(dist >= 0).sum():,} total")
+        return dist
+
+    def hops(self, seeds, n_hops, direction='out', min_syn=1, verbose=True):
+        """Neurons reachable within n_hops (each hop: edges with >= min_syn)."""
+        return np.flatnonzero(self.distances(seeds, n_hops, direction, min_syn, verbose) >= 0)
+
+    def path_neurons(self, src, dst, max_len, min_syn=1, verbose=True):
+        """Neurons on some path src -> ... -> dst of at most max_len hops:
+        dist_from_src + dist_to_dst <= max_len."""
+        if verbose: print("downstream of source:")
+        df = self.distances(src, max_len, 'out', min_syn, verbose)
+        if verbose: print("upstream of target:")
+        db = self.distances(dst, max_len, 'in', min_syn, verbose)
+        ok = (df >= 0) & (db >= 0) & (df.astype(int) + db <= max_len)
+        return np.flatnonzero(ok), df, db
 
     def subnetwork(self, keep, sign_col='sign'):
         """Edges among `keep` only, renumbered 0..len(keep)-1."""
@@ -134,7 +149,7 @@ class LIFNet:
         g2l = pd.Series(np.arange(n), index=self.keep)
         self.stim = g2l.loc[np.asarray(stim_global)].to_numpy()
 
-        t0 = time.time()
+        t0 = time.perf_counter()
         ns = {k: self.p[k] for k in ('v_0', 'v_rst', 'v_th', 't_mbr', 'tau')}
         self.neu = NeuronGroup(n, EQS, method='linear', threshold='v > v_th',
                                reset='v = v_rst; g = 0*mV', refractory='rfc',
@@ -163,13 +178,13 @@ class LIFNet:
         self.net.store('init')
         if verbose:
             print(f"built: {n:,} neurons, {len(sub['w']):,} connections, "
-                  f"{time.time() - t0:.1f} s, peak memory {peak_mem_gb():.2f} GB")
+                  f"{time.perf_counter() - t0:.1f} s, peak memory {peak_mem_gb():.2f} GB")
 
     def run(self, rate=None, n_trials=5, t_run=1 * second, w_scale=1.0, seed=0, verbose=True):
         """Run trials; returns spikes (local idx, time, trial) as a DataFrame."""
         rate = self.p['r_poi'] if rate is None else rate
         out = []
-        t0 = time.time()
+        t0 = time.perf_counter()
         for trial in range(n_trials):
             self.net.restore('init')
             b2seed(seed + trial)
@@ -181,7 +196,7 @@ class LIFNet:
                                      'trial': trial}))
         self.t_run, self.n_trials = float(t_run / second), n_trials
         if verbose:
-            print(f"{n_trials} trials × {self.t_run:g} s: {time.time() - t0:.1f} s, "
+            print(f"{n_trials} trials × {self.t_run:g} s: {time.perf_counter() - t0:.1f} s, "
                   f"peak memory {peak_mem_gb():.2f} GB")
         return pd.concat(out, ignore_index=True)
 
