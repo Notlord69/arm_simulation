@@ -137,6 +137,66 @@ class WeightSet:
                     post=local[self.post[m]][nz].astype(np.int32),
                     w=w[nz].astype(np.float64))
 
+    def path_subnetwork(self, src, dst, max_len=7, min_syn=5, max_conn=2_500_000,
+                        extra=(), verbose=True):
+        """Subnetwork of neurons on src -> dst paths of length <= L, choosing the
+        largest L whose subnetwork has <= max_conn connections. `extra` neurons
+        (e.g. candidates to record) are always included."""
+        _, df, db = self.path_neurons(src, dst, max_len, min_syn, verbose)
+        ok = (df >= 0) & (db >= 0)
+        total = df.astype(int) + db
+        reach = df[np.asarray(dst)]
+        reach = reach[reach >= 0]
+        if len(reach) == 0:
+            raise ValueError(f"no target reachable within {max_len} hops")
+        shortest = int(reach.min())
+        always = np.concatenate([np.asarray(src), np.asarray(dst), np.asarray(extra, dtype=int)])
+        if verbose:
+            print(f"\nshortest path: {shortest} hops; targets reachable within {max_len}: "
+                  f"{(df[np.asarray(dst)] >= 0).sum()}/{len(dst)}\n")
+        best, table = None, []
+        for L in range(shortest, max_len + 1):
+            keep = np.union1d(np.flatnonzero(ok & (total <= L)), always)
+            sub = self.subnetwork(keep)
+            table.append(dict(L=L, neurons=len(keep), connections=len(sub['w'])))
+            if verbose:
+                print(f"L = {L}: {len(keep):>7,} neurons, {len(sub['w']):>10,} connections")
+            if len(sub['w']) > max_conn:
+                break
+            best = (L, sub)
+        if best is None:
+            raise ValueError("even the shortest-path subnetwork exceeds max_conn")
+        if verbose:
+            print(f"\nusing L = {best[0]}")
+        return best[1], best[0], pd.DataFrame(table), df
+
+
+def shuffle_sub(sub, seed=0):
+    """Degree-preserving random rewiring of a subnetwork: targets are permuted
+    across all connections, so every neuron keeps its number of outgoing and
+    incoming connections, and each connection keeps its weight and sign
+    (sign follows the presynaptic neuron)."""
+    rng = np.random.default_rng(seed)
+    return dict(sub, post=rng.permutation(sub['post']))
+
+
+def raster(ax, spikes, net, groups, trial=0, max_per_group=40):
+    """Raster of selected groups. groups = {label: global indices}."""
+    g2l = pd.Series(np.arange(len(net.keep)), index=net.keep)
+    s = spikes[spikes.trial == trial]
+    row0, ticks = 0, []
+    for label, idx in groups.items():
+        idx = np.asarray(idx)[np.isin(idx, net.keep)][:max_per_group]
+        local = g2l.loc[idx].to_numpy()
+        rows = pd.Series(np.arange(len(local)) + row0, index=local)
+        ss = s[s.local.isin(local)]
+        ax.scatter(ss.t, ss.local.map(rows), s=1, c='k')
+        ticks.append((row0 + len(local) / 2, label))
+        row0 += len(local)
+        ax.axhline(row0 - 0.5, color='tab:red', lw=0.6)
+    ax.set_yticks([t for t, _ in ticks], [l for _, l in ticks])
+    ax.set_xlabel('time (s)')
+
 
 # ---------------------------------------------------------------- simulation
 class LIFNet:
