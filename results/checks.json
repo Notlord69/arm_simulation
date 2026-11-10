@@ -1,0 +1,89 @@
+{
+ "detector": {
+  "cube at rest in zone, arm away (expect True)": true,
+  "cube at start, arm away (False)": false,
+  "cube 6 cm from zone centre (False)": false,
+  "cube in zone but sliding (False)": false,
+  "cube floating 3 cm up in zone (False)": false
+ },
+ "do_nothing_policy": 0.0,
+ "random_policy": 0.0,
+ "same_seed_identical": true,
+ "dataset": {
+  "rows": 63794,
+  "episodes": 1000,
+  "train_rows": 51121,
+  "val_rows": 12673,
+  "clean_success": 1.0,
+  "noisy_success": 0.994,
+  "failed_seeds": [
+   200469,
+   200535,
+   300137
+  ],
+  "any_nan": false,
+  "labels_recomputed_mismatch": 0.0,
+  "seeds_overlap": 0,
+  "delta_in_bounds": true,
+  "frac_steps_saturated": 0.6586826347305389,
+  "phase_share": {
+   "reach": 0.115496755180738,
+   "descend": 0.15529673637019156,
+   "close": 0.05448788287299746,
+   "lift": 0.06743580901025174,
+   "carry": 0.28218954760635795,
+   "lower": 0.08872307740539863,
+   "release": 0.04368749412170424,
+   "retreat": 0.1926826974323604
+  },
+  "cube_x_range": [
+   0.350187534393125,
+   0.5997251290528884
+  ],
+  "cube_y_range": [
+   -0.249958508855048,
+   0.1498109655567827
+  ],
+  "ep_len_median": 61.0
+ },
+ "replay_max_cube_error_mm": 0.0,
+ "place_bias_mm": [
+  -3.294520190922421,
+  -1.2247082908110105
+ ],
+ "imitation": {
+  "ridge, linear (clean+noisy)": {
+   "train_rows": 50621,
+   "val_r2": [
+    0.5552252599601639,
+    0.8533762301317384,
+    0.7756377918122852,
+    0.8703866277170901
+   ],
+   "closed_loop_success": 0.0,
+   "median_place_mm": null
+  },
+  "MLP (clean only)": {
+   "train_rows": 23330,
+   "val_r2": [
+    0.8743454149715983,
+    0.9315610513249478,
+    0.850369829006986,
+    0.9237595666273446
+   ],
+   "closed_loop_success": 1.0,
+   "median_place_mm": 7.389638247871822
+  },
+  "MLP (clean+noisy)": {
+   "train_rows": 50621,
+   "val_r2": [
+    0.9741882836437301,
+    0.9863298340331705,
+    0.9501276788476662,
+    0.9768986829950511
+   ],
+   "closed_loop_success": 0.94,
+   "median_place_mm": 1.5000939821762072
+  }
+ }
+}

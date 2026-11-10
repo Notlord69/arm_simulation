@@ -1,0 +1,9 @@
+{
+ "moves": 15,
+ "peak_cmd_speed_m_s": 0.5,
+ "rms_track_mm": 4.850365913463978,
+ "peak_track_mm": 24.54310687401728,
+ "settled_worst_mm": 0.48205469278071167,
+ "settled_median_mm": 0.2465411778713998,
+ "peak_tilt_deg": 2.416410621953
+}

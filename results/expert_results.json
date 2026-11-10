@@ -1,0 +1,200 @@
+{
+ "stress": {
+  "action noise 2 mm/step": {
+   "n": 100,
+   "successes": 100,
+   "rate": 1.0,
+   "ci95": [
+    0.9630051925239981,
+    0.9999999999999999
+   ],
+   "median_steps": 51.0,
+   "p95_steps": 64.0,
+   "median_place_mm": 4.561231084297774,
+   "p95_place_mm": 10.12342973221836,
+   "max_place_mm": 13.44573458418614
+  },
+  "action noise 5 mm/step": {
+   "n": 100,
+   "successes": 100,
+   "rate": 1.0,
+   "ci95": [
+    0.9630051925239981,
+    0.9999999999999999
+   ],
+   "median_steps": 58.0,
+   "p95_steps": 86.0,
+   "median_place_mm": 8.392439186806762,
+   "p95_place_mm": 21.445362584463986,
+   "max_place_mm": 28.900489157054214
+  },
+  "action noise 10 mm/step": {
+   "n": 100,
+   "successes": 91,
+   "rate": 0.91,
+   "ci95": [
+    0.8377362530335634,
+    0.9519280048361151
+   ],
+   "median_steps": 113.0,
+   "p95_steps": 218.0,
+   "median_place_mm": 17.74640549829651,
+   "p95_place_mm": 43.281284028117554,
+   "max_place_mm": 49.98748073321704
+  },
+  "action noise 20 mm/step": {
+   "n": 100,
+   "successes": 6,
+   "rate": 0.06,
+   "ci95": [
+    0.02778574526665662,
+    0.12476968531222507
+   ],
+   "median_steps": 167.0,
+   "p95_steps": 224.25,
+   "median_place_mm": 18.17602439956481,
+   "p95_place_mm": 44.80312191973068,
+   "max_place_mm": 49.780048703054334
+  },
+  "cube sensing noise 2 mm": {
+   "n": 100,
+   "successes": 100,
+   "rate": 1.0,
+   "ci95": [
+    0.9630051925239981,
+    0.9999999999999999
+   ],
+   "median_steps": 48.0,
+   "p95_steps": 60.0,
+   "median_place_mm": 3.9208616372846854,
+   "p95_place_mm": 7.164067619693361,
+   "max_place_mm": 9.388107957452691
+  },
+  "cube sensing noise 5 mm": {
+   "n": 100,
+   "successes": 99,
+   "rate": 0.99,
+   "ci95": [
+    0.9455124752390653,
+    0.9982326134344526
+   ],
+   "median_steps": 53.0,
+   "p95_steps": 102.69999999999996,
+   "median_place_mm": 5.068569542906208,
+   "p95_place_mm": 13.109378748645804,
+   "max_place_mm": 32.112691238263324
+  },
+  "cube yaw 15 deg": {
+   "n": 100,
+   "successes": 100,
+   "rate": 1.0,
+   "ci95": [
+    0.9630051925239981,
+    0.9999999999999999
+   ],
+   "median_steps": 48.0,
+   "p95_steps": 60.0,
+   "median_place_mm": 3.928607153847376,
+   "p95_place_mm": 4.520712232586656,
+   "max_place_mm": 6.139680286450635
+  },
+  "cube yaw 30 deg": {
+   "n": 100,
+   "successes": 97,
+   "rate": 0.97,
+   "ci95": [
+    0.915479219195973,
+    0.9897456617765851
+   ],
+   "median_steps": 161.0,
+   "p95_steps": 176.39999999999998,
+   "median_place_mm": 4.0698099311129665,
+   "p95_place_mm": 5.786523912357483,
+   "max_place_mm": 16.587264367975692
+  },
+  "cube yaw 45 deg": {
+   "n": 100,
+   "successes": 0,
+   "rate": 0.0,
+   "ci95": [
+    0.0,
+    0.03699480747600191
+   ],
+   "median_steps": null,
+   "p95_steps": null,
+   "median_place_mm": null,
+   "p95_place_mm": null,
+   "max_place_mm": null
+  },
+  "cube mass 240 g": {
+   "n": 100,
+   "successes": 100,
+   "rate": 1.0,
+   "ci95": [
+    0.9630051925239981,
+    0.9999999999999999
+   ],
+   "median_steps": 48.0,
+   "p95_steps": 59.05,
+   "median_place_mm": 3.5526079246307365,
+   "p95_place_mm": 4.236094661994015,
+   "max_place_mm": 4.40661200859934
+  },
+  "cube mass 400 g": {
+   "n": 100,
+   "successes": 100,
+   "rate": 1.0,
+   "ci95": [
+    0.9630051925239981,
+    0.9999999999999999
+   ],
+   "median_steps": 48.0,
+   "p95_steps": 60.0,
+   "median_place_mm": 3.1682653383126587,
+   "p95_place_mm": 4.132390134327224,
+   "max_place_mm": 7.94724577757787
+  },
+  "cube mass 800 g": {
+   "n": 100,
+   "successes": 93,
+   "rate": 0.93,
+   "ci95": [
+    0.8625032899347025,
+    0.965681175635936
+   ],
+   "median_steps": 48.0,
+   "p95_steps": 71.39999999999999,
+   "median_place_mm": 2.845306291524437,
+   "p95_place_mm": 5.542722487459234,
+   "max_place_mm": 27.314384266360495
+  },
+  "friction 0.5": {
+   "n": 100,
+   "successes": 100,
+   "rate": 1.0,
+   "ci95": [
+    0.9630051925239981,
+    0.9999999999999999
+   ],
+   "median_steps": 48.0,
+   "p95_steps": 59.05,
+   "median_place_mm": 3.1097324889902462,
+   "p95_place_mm": 3.573445589164394,
+   "max_place_mm": 3.7543088777323033
+  },
+  "friction 0.3": {
+   "n": 100,
+   "successes": 100,
+   "rate": 1.0,
+   "ci95": [
+    0.9630051925239981,
+    0.9999999999999999
+   ],
+   "median_steps": 48.0,
+   "p95_steps": 59.05,
+   "median_place_mm": 2.6549464817632717,
+   "p95_place_mm": 3.1935916452639743,
+   "max_place_mm": 3.2987584412780797
+  }
+ }
+}

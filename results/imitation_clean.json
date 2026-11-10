@@ -1,0 +1,17 @@
+[
+ {
+  "seed": 0,
+  "clean": 1.0,
+  "noisy": 0.6
+ },
+ {
+  "seed": 1,
+  "clean": 1.0,
+  "noisy": 0.74
+ },
+ {
+  "seed": 2,
+  "clean": 0.98,
+  "noisy": 0.5
+ }
+]
